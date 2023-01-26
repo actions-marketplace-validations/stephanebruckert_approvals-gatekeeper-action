@@ -1,5 +1,5 @@
 {
-  "name": "@stephanebruckert/dismiss-code-reviews-not-from-x",
+  "name": "@stephanebruckert/approvals-gatekeeper-action",
   "version": "0.1.0",
   "description": "Dismiss code reviews on pull requests from anyone not in the list.",
   "main": "dist/main.ts",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stephanebruckert/dismiss-code-reviews-not-from-x.git"
+    "url": "git+https://github.com/stephanebruckert/approvals-gatekeeper-action.git"
   },
   "keywords": [
     "actions",
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stephanebruckert/dismiss-code-reviews-not-from-x/issues"
+    "url": "https://github.com/stephanebruckert/approvals-gatekeeper-action/issues"
   },
-  "homepage": "https://github.com/stephanebruckert/dismiss-code-reviews-not-from-x#readme",
+  "homepage": "https://github.com/stephanebruckert/approvals-gatekeeper-action#readme",
   "dependencies": {
     "@actions/core": "^1.9.1",
     "@actions/github": "^5.1.0"

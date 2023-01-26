@@ -1,4 +1,4 @@
-# GitHub Action: dismiss code reviews from users not in list
+# GitHub Action: approvals gatekeeper
 
 Github doesn't differentiate between reviewers from one group or the other. A review is a review. This action
 allows rejecting approvals from users that are not in your list.
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
-      - uses: stephanebruckert/dismiss-code-reviews-not-from-x@v0.1.0
+      - uses: stephanebruckert/approvals-gatekeeper-action@v0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           x: stephanebruckert some-other-username
