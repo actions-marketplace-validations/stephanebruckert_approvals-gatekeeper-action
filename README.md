@@ -1,33 +1,27 @@
-# GitHub Action: do not allow committers on a Pull Request to approve the PR
+# GitHub Action: dismiss code reviews from users not in list
 
-While GitHub prevents self-approval of PRs, it doesn't prevent a user from approving a PR they worked on. In some scenarios, this could allow for PRs to be approved with no outside review.
+Github doesn't differentiate between reviewers from one group or the other. A review is a review. This action
+allows rejecting approvals from users that are not in your list.
 
-This action prevents any committers on a Pull Request from approving the PR. It can be used standalone (e.g. triggered by on all submitted Pull Requests in a repo), or as a Required Status Check.
+A great use case is combining this action with https://github.com/tj-actions/changed-files to conditionally
+allow groups of reviewers for different types of files.
 
 ## Usage instructions
 
-Create a workflow file (e.g. `.github/workflows/reject-self-approve.yml`) that contains a step 
-that has `uses: peckjon/reject-pr-approval-from-committer`.
-
-The workflow using this action is supposed to be triggered by `pull_request` or `pull_request_target` event.
-
-Here's an example workflow file:
-
 ```yaml
-name: Prevent committers from approvaing a PR
+name: dismiss code reviews from users not in list
 
 on:
   pull_request_review:
     types: [submitted]
 
 jobs:
-  preventapprove:
-    name: reject PR approval by committers to the PR
+  dismiss-code-reviews:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
-      - name: Dismiss code reviews from collaborators
-        uses: peckjon/reject-pr-approval-from-committer@master
+      - uses: stephanebruckert/reject-pr-approval-not-from-x@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          x: stephanebruckert some-other-username
 ```

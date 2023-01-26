@@ -3,7 +3,12 @@ import * as github from '@actions/github';
 
 type GitHub = ReturnType<typeof github.getOctokit>;
 
-async function removeExistingApprovalsIfExist(client: GitHub, pr: any) {
+async function removeExistingApprovalsIfExist(
+  client: GitHub,
+  pr: any,
+  x: string,
+  dismissMessage: string
+) {
   // Get list of all reviews on a PR
   const { data: listReviews } = await client.rest.pulls.listReviews({
     owner: github.context.repo.owner,
@@ -18,32 +23,25 @@ async function removeExistingApprovalsIfExist(client: GitHub, pr: any) {
     pull_number: pr.number,
   });
 
-  // List logins of all commit authors on the PR
-  var commitAuthorLogins = listCommits.map(function (commit) {
-    return commit.author?.login;
-  });
-
   // Remove PR approvals by any committer to the PR
   for (let review of listReviews) {
     if (
       review.state === 'APPROVED' &&
       review.user &&
-      commitAuthorLogins.includes(review.user.login)
+      !x.split(' ').includes(review.user.login)
     ) {
       core.info(
-        `Removing an approval (${review.id}) from ${review.user?.login} (cannot approve this PR since they committed to it)`
+        `Removing an approval (${review.id}) from ${review.user?.login} (${dismissMessage})`
       );
       const dismissResponse = await client.rest.pulls.dismissReview({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         pull_number: pr.number,
         review_id: review.id,
-        message: `${review.user?.login} cannot approve this PR since they committed to it`,
+        message: `${review.user?.login} ${dismissMessage}`,
       });
       core.debug(`dismissResponse: ${JSON.stringify(dismissResponse)}`);
-      core.setFailed(
-        `${review.user?.login} cannot approve this PR since they committed to it`
-      );
+      core.setFailed(`${review.user?.login} ${dismissMessage}`);
     }
   }
 }
@@ -51,6 +49,8 @@ async function removeExistingApprovalsIfExist(client: GitHub, pr: any) {
 async function run() {
   try {
     const token = core.getInput('github-token', { required: true });
+    const x = core.getInput('x', { required: true });
+    const dismissMessage = core.getInput('dismiss-message', { required: true });
 
     const { pull_request: pr } = github.context.payload;
     if (!pr) {
@@ -61,7 +61,7 @@ async function run() {
 
     const client = github.getOctokit(token);
 
-    await removeExistingApprovalsIfExist(client, pr);
+    await removeExistingApprovalsIfExist(client, pr, x, dismissMessage);
   } catch (error) {
     core.setFailed((error as Error).message);
   }

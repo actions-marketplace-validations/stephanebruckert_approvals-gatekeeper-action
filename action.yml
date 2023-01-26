@@ -6,7 +6,13 @@ branding:
 author: 'peckjon'
 inputs:
   github-token:
-    description: 'The GITHUB_TOKEN secret or PAT'
+    description: 'The GITHUB_TOKEN secret or PATH'
+    required: true
+  x:
+    description: 'The reviewers'
+    required: true
+  dismiss-message:
+    description: 'Dismiss message'
     required: true
 runs:
   using: 'node12'
