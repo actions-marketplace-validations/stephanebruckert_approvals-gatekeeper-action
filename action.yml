@@ -1,5 +1,5 @@
-name: 'Dismiss code reviews from collaborators'
-description: 'Dismiss code reviews on pull requests from anyone worked on it.'
+name: 'Dismiss code reviews not from x'
+description: 'Dismiss code reviews on pull requests from anyone not in the list.'
 branding:
   icon: 'thumbs-down'
   color: 'red'
