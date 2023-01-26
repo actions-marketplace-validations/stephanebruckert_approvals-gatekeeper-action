@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
-      - uses: stephanebruckert/reject-pr-approval-not-from-x@master
+      - uses: stephanebruckert/dismiss-code-reviews-not-from-x@v0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           x: stephanebruckert some-other-username
